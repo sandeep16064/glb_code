@@ -2,17 +2,18 @@
 text summarization using KG and transformer
 
 # Setup Instructions
-1. Clone the Repository
-bash
-Copy code
+## 1. Clone the Repository
+
+
 git clone https://github.com/your-repo/text_summarization.git
 cd text_summarization
-2. Install Dependencies
+# 2. Install Dependencies
 Install the required Python packages using pip:
 
 
 pip install -r requirements.txt
-3. Prepare Your Dataset
+
+# 3. Prepare Your Dataset
 Ensure your dataset is in the data/ directory in a CSV file named dataset.csv with two columns: text and summary.
 
 Example:
@@ -21,31 +22,32 @@ Example:
 text,summary
 "This is the text data.", "This is the summary."
 "Another text data example.", "Another summary example."
-Preprocessing
-4. Preprocess the Data
+
+# Preprocessing
+#4. Preprocess the Data
 Run the preprocessing script to tokenize the text and build the knowledge graph:
 
 
 python scripts/preprocess.py
-Model Training
-5. Train the Model
+# Model Training
+## 5. Train the Model
 Train the Transformer model with the processed data:
 
 
 python scripts/train.py
-6. Monitor Training
+# 6. Monitor Training
 During training, you will see the validation loss after each epoch. You can adjust hyperparameters in the train.py script as needed.
 
-Summarization
-7. Generate Summaries
+# Summarization
+## 7. Generate Summaries
 Use the trained model to generate summaries for new text data:
 
 
 python scripts/summarize.py
 Modify the text variable in the summarize.py script to load your input text.
 
-Evaluation
-8. Evaluate the Model
+# Evaluation
+## 8. Evaluate the Model
 Use the provided metrics to evaluate the summarization performance:
 
 # utils/metrics.py
