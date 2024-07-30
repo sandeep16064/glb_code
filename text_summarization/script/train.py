@@ -7,32 +7,35 @@ from models.transformer import TransformerModel
 from utils.data_loader import TextDataset
 from utils.metrics import calculate_metrics
 
-def train_model(model, train_loader, val_loader, epochs, criterion, optimizer):
+def train_model(model, train_loader, val_loader, epochs, criterion, optimizer, device):
+    model.to(device)
     for epoch in range(epochs):
         model.train()
         for batch in train_loader:
-            src, tgt = batch
+            src, tgt = [b.to(device) for b in batch]
             optimizer.zero_grad()
             output = model(src, tgt)
             loss = criterion(output.view(-1, output.size(-1)), tgt.view(-1))
             loss.backward()
             optimizer.step()
         
-        val_loss = validate_model(model, val_loader, criterion)
+        val_loss = validate_model(model, val_loader, criterion, device)
         print(f'Epoch {epoch+1}, Val Loss: {val_loss}')
 
-def validate_model(model, val_loader, criterion):
+def validate_model(model, val_loader, criterion, device):
     model.eval()
     total_loss = 0
     with torch.no_grad():
         for batch in val_loader:
-            src, tgt = batch
+            src, tgt = [b.to(device) for b in batch]
             output = model(src, tgt)
             loss = criterion(output.view(-1, output.size(-1)), tgt.view(-1))
             total_loss += loss.item()
     return total_loss / len(val_loader)
 
 if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
     vocab_size = 10000
     d_model = 512
     nhead = 8
@@ -55,4 +58,4 @@ if __name__ == "__main__":
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
     
-    train_model(model, train_loader, val_loader, epochs, criterion, optimizer)
+    train_model(model, train_loader, val_loader, epochs, criterion, optimizer, device)
